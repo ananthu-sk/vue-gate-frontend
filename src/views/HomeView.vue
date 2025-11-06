@@ -121,16 +121,16 @@ if __name__ == "__main__":
   <form class="form-container" @submit.prevent="onSubmit">
     <h1 class="heading">Consumer Configs</h1>
     <label for="broker_address">Broker Address</label>
-    <input type="text" name="broker_address" v-model="form.broker_address" />
+    <input type="text" id="broker_address" v-model="form.broker_address" />
 
     <label for="input_topic_name">Input Topic Name</label>
-    <input type="text" name="input_topic_name" v-model="form.input_topic_name" />
+    <input type="text" id="input_topic_name" v-model="form.input_topic_name" />
 
     <label for="output_topic_name">Output Topic Name</label>
-    <input type="text" name="output_topic_name" v-model="form.output_topic_name" />
+    <input type="text" id="output_topic_name" v-model="form.output_topic_name" />
 
-    <label for="transformation_python_code">Transformation Python Code</label>
-    <div class="code-editor-container">
+    <label name="transformation_python_code">Transformation Python Code</label>
+    <div id="transformation_python_code" class="code-editor-container">
       <CodeEditor
         v-model:value="form.transformation_python_code"
         language="python"
