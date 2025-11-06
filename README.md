@@ -2,6 +2,11 @@
 
 Vue application to create custom consumer.py.
 
+## Usage
+
+- Generate and download consumer.py from `https://ananthu-sk.github.io/vue-gate-frontend/`.
+- python consumer.py
+
 ## Project Setup
 
 ```sh
