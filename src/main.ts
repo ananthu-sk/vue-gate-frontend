@@ -8,7 +8,10 @@ import router from './router'
 
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 
-// @ts-ignore
+import '@vue-flow/core/dist/style.css'
+import '@vue-flow/core/dist/theme-default.css'
+
+// @ts-expect-error
 self.MonacoEnvironment = {
   // @ts-ignore
   getWorker(_, label) {
