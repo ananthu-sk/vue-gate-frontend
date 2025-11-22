@@ -5,9 +5,13 @@ import { useVueFlow } from '@vue-flow/core'
 const { updateNodeData } = useVueFlow()
 const props = defineProps(['id', 'data'])
 
-const onInput = (event) => {
+const onInput = (event: InputEvent) => {
+  const target = event.target as HTMLInputElement | null
+  if (!target) {
+    return
+  }
   updateNodeData(props.id, {
-    content: event.target.value,
+    content: target.value,
   })
 }
 </script>

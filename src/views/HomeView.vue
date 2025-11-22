@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { VueFlow, useVueFlow, Panel } from '@vue-flow/core'
+import { ConnectionMode, VueFlow, useVueFlow, Panel, type Node, type Edge } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { ControlButton, Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
+// @ts-ignore
 import { initialEdges, initialNodes } from '../assets/initial-flow.js'
 import Icon from '../components/Icon.vue'
 import CustomTransformNode from '@/components/CustomTransformNode.vue'
@@ -16,7 +17,16 @@ import CustomOutputNode from '@/components/CustomOutputNode.vue'
  * 2. a set of event-hooks to listen to VueFlow events (like `onInit`, `onNodeDragStop`, `onConnect`, etc)
  * 3. the internal state of the VueFlow instance (like `nodes`, `edges`, `viewport`, etc)
  */
-const { onInit, onConnect, addEdges, setViewport, toObject, getConnectedEdges } = useVueFlow()
+const {
+  onInit,
+  onConnect,
+  addEdges,
+  setViewport,
+  toObject,
+  getConnectedEdges,
+  removeEdges,
+  removeNodes,
+} = useVueFlow()
 
 const nodes = ref(initialNodes)
 
@@ -52,7 +62,7 @@ onConnect((connection) => {
  * 3. Create a new array of nodes and pass it to the `nodes` ref
  */
 function updatePos() {
-  nodes.value = nodes.value.map((node) => {
+  nodes.value = nodes.value.map((node: Node) => {
     return {
       ...node,
       position: {
@@ -81,8 +91,12 @@ function toggleDarkMode() {
   dark.value = !dark.value
 }
 
-function removeEdge({ edge }) {
-  edges.value = edges.value.filter((e) => e.id !== edge.id)
+function removeEdge({ edge }: { edge: Edge }) {
+  removeEdges(edge.id)
+}
+
+function removeNode({ node }: { node: Node }) {
+  removeNodes(node.id, true)
 }
 
 let transformationNodeNumber = 2
@@ -109,11 +123,12 @@ function addNode() {
   })
 }
 
-function removeNode({ node }) {
-  const edgesConnected = getConnectedEdges(node.id)
-  edges.value = edges.value.filter((e) => !edgesConnected.find((ec) => e.id === ec.id))
-
-  nodes.value = nodes.value.filter((n) => n.id !== node.id)
+const onDownload = () => {
+  // const graphObject = toObject()
+  // const inputNode = graphObject.nodes.find((n) => n.type === 'custom-input')
+  // const outputNode = graphObject.nodes.find((n) => n.type === 'custom-output')
+  // const arrayTransformNodes = []
+  // getConnectedEdges(inputNode?.id).forEach((e) => {})
 }
 </script>
 
@@ -128,11 +143,21 @@ function removeNode({ node }) {
     :max-zoom="4"
     @edge-double-click="removeEdge"
     @node-double-click="removeNode"
+    :connection-mode="ConnectionMode.Strict"
   >
     <Panel position="top-right">
-      <button class="uk-button uk-button-primary uk-button-small" type="button" @click="addNode">
-        Add a node
-      </button>
+      <div class="panel">
+        <button class="uk-button uk-button-primary uk-button-small" type="button" @click="addNode">
+          Add a node
+        </button>
+        <button
+          class="uk-button uk-button-primary uk-button-small"
+          type="button"
+          @click="onDownload"
+        >
+          Download
+        </button>
+      </div>
     </Panel>
 
     <template #node-custom-input="props">

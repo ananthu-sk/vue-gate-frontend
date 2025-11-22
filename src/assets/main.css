@@ -112,3 +112,7 @@ body,
 .uk-modal-title {
   color: white;
 }
+
+.panel > button:first-child {
+  margin-right: 10px;
+}
