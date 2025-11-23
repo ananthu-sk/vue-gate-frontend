@@ -123,7 +123,7 @@ function addNode() {
   })
 }
 
-const onDownload = () => {
+const onRun = () => {
   // const graphObject = toObject()
   // const inputNode = graphObject.nodes.find((n) => n.type === 'custom-input')
   // const outputNode = graphObject.nodes.find((n) => n.type === 'custom-output')
@@ -150,12 +150,8 @@ const onDownload = () => {
         <button class="uk-button uk-button-primary uk-button-small" type="button" @click="addNode">
           Add a node
         </button>
-        <button
-          class="uk-button uk-button-primary uk-button-small"
-          type="button"
-          @click="onDownload"
-        >
-          Download
+        <button class="uk-button uk-button-primary uk-button-small" type="button" @click="onRun">
+          Run
         </button>
       </div>
     </Panel>
