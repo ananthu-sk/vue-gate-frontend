@@ -28,6 +28,6 @@ const onInput = (event: InputEvent) => {
         @input="onInput"
       />
     </div>
-    <Handle type="source" :position="Position.Right" />
+    <Handle type="source" :position="Position.Right" :connectable="1" />
   </div>
 </template>

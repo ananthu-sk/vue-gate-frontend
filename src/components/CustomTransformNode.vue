@@ -30,7 +30,7 @@ const editorOptions = {
 
 <template>
   <div class="container">
-    <Handle type="target" :position="Position.Left" />
+    <Handle type="target" :position="Position.Left" :connectable="1" />
     <div class="dark">
       <p>{{ reactiveData.content }}</p>
 
@@ -68,7 +68,7 @@ const editorOptions = {
       </div>
     </div>
 
-    <Handle type="source" :position="Position.Right" />
+    <Handle type="source" :position="Position.Right" :connectable="1" />
   </div>
 </template>
 
