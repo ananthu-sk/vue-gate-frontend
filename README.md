@@ -1,11 +1,6 @@
 # vue-gate-frontend
 
-Vue application to create custom consumer.py.
-
-## Usage
-
-- Generate and download consumer.py from `https://ananthu-sk.github.io/vue-gate-frontend/`.
-- python consumer.py
+Vue application to create and run multiple transforms.
 
 ## Project Setup
 
