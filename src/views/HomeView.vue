@@ -4,8 +4,7 @@ import { ConnectionMode, VueFlow, useVueFlow, Panel, type Node, type Edge } from
 import { Background } from '@vue-flow/background'
 import { ControlButton, Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
-// @ts-ignore
-import { initialEdges, initialNodes } from '../assets/initial-flow.js'
+import { initialEdges, initialNodes } from '../assets/initial-flow.ts'
 import Icon from '../components/Icon.vue'
 import CustomTransformNode from '@/components/CustomTransformNode.vue'
 import CustomInputNode from '@/components/CustomInputNode.vue'
@@ -17,16 +16,8 @@ import CustomOutputNode from '@/components/CustomOutputNode.vue'
  * 2. a set of event-hooks to listen to VueFlow events (like `onInit`, `onNodeDragStop`, `onConnect`, etc)
  * 3. the internal state of the VueFlow instance (like `nodes`, `edges`, `viewport`, etc)
  */
-const {
-  onInit,
-  onConnect,
-  addEdges,
-  setViewport,
-  toObject,
-  getConnectedEdges,
-  removeEdges,
-  removeNodes,
-} = useVueFlow()
+const { onInit, onConnect, addEdges, setViewport, toObject, fromObject, removeEdges, removeNodes } =
+  useVueFlow()
 
 const nodes = ref(initialNodes)
 
@@ -130,6 +121,73 @@ const onRun = () => {
   // const arrayTransformNodes = []
   // getConnectedEdges(inputNode?.id).forEach((e) => {})
 }
+
+const onExport = () => {
+  const blob = new Blob([JSON.stringify(toObject())], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'graph.json'
+  link.click()
+
+  URL.revokeObjectURL(url)
+}
+
+const getFileElement = () => {
+  const element = document.getElementById('fileUpload') as HTMLInputElement | null
+  if (element) {
+    return element
+  }
+}
+
+const onImport = () => {
+  const element = getFileElement()
+  if (element) {
+    element.click()
+  }
+}
+
+const uploadJson = (event: Event) => {
+  const files = (event.target as HTMLInputElement)?.files
+  if (!files || files.length === 0) {
+    return
+  }
+
+  const file = files[0]
+
+  const reader = new FileReader()
+
+  reader.onload = function (e) {
+    try {
+      const target = e.target
+      if (!target) {
+        return
+      }
+      const jsonText = target.result
+      if (typeof jsonText === 'string') {
+        const flow = JSON.parse(jsonText)
+
+        if (flow) {
+          fromObject(flow)
+
+          const element = getFileElement()
+          if (element) {
+            element.value = ''
+          }
+        }
+      }
+    } catch (error) {
+      // Handle malformed JSON content
+      console.error('Error parsing JSON', error)
+    }
+  }
+
+  // readAsText is used for text-based files like JSON, XML, or plain text.
+  if (file) {
+    reader.readAsText(file)
+  }
+}
 </script>
 
 <template>
@@ -152,6 +210,13 @@ const onRun = () => {
         </button>
         <button class="uk-button uk-button-primary uk-button-small" type="button" @click="onRun">
           Run
+        </button>
+        <button class="uk-button uk-button-primary uk-button-small" type="button" @click="onExport">
+          Export
+        </button>
+        <input id="fileUpload" type="file" accept="application/json" @change="uploadJson" hidden />
+        <button class="uk-button uk-button-primary uk-button-small" type="button" @click="onImport">
+          Import
         </button>
       </div>
     </Panel>

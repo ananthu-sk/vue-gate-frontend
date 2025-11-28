@@ -1,4 +1,6 @@
-export const initialNodes = [
+import { type Node, type Edge } from '@vue-flow/core'
+
+export const initialNodes: Node[] = [
   {
     id: '1',
     type: 'custom-input',
@@ -45,7 +47,7 @@ export const initialNodes = [
   },
 ]
 
-export const initialEdges = [
+export const initialEdges: Edge[] = [
   {
     id: 'e1-2',
     source: '1',

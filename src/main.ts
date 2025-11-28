@@ -11,10 +11,16 @@ import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import '@vue-flow/core/dist/style.css'
 import '@vue-flow/core/dist/theme-default.css'
 
-// @ts-expect-error
+declare global {
+  interface Window {
+    MonacoEnvironment: {
+      getWorker(moduleId: string, label: string): Worker
+    }
+  }
+}
+
 self.MonacoEnvironment = {
-  // @ts-ignore
-  getWorker(_, label) {
+  getWorker(): Worker {
     return new editorWorker()
   },
 }
